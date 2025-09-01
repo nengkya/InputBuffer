@@ -90,6 +90,19 @@ InputMemory newInputMemory() {
     Pointers are helpful because you can "move them around" more easily.
     Instead of having to copy over the whole stucture each time, you can just leave it where it is in memory and instead pass a pointer to it around.
     passing a pointer means you can modify "a" without having to copy it back, since the stucture resides in only one place in memory.
+
+    book->author;
+    (*book).author;
+
+    Why Use Struct Pointers?
+    You want to avoid copying large amounts of data.
+    Instead of copying a whole struct, you can just pass a pointer. This makes your program faster and uses less memory.
+
+    You want to change values inside a function.
+    If you pass a pointer to a struct into a function, the function can change the original values.
+
+    You want to create structs dynamically using memory allocation.
+    With pointers, you can use malloc() to create structs while the program is running.
     */
 
 }
