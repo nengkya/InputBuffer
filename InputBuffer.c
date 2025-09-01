@@ -11,10 +11,21 @@ Usually what happens is the system type (in this case ssize_t) takes advantage o
 e.g. typedef signed ssize_t (this is part of SUSv3 standard data types --Single UNIX Specification).
 It is good practice to use system data types, where possible, when implementing any kind of system-level programming.
 
+Error Handling:
+The primary distinction lies in ssize_t's explicit design for error indication through negative values.
+long int does not carry this implicit meaning for error conditions.
+Domain:
+ssize_t is specifically for sizes, counts, and return values of I/O operations where errors need to be distinguished from valid data sizes.
+long int is for general-purpose integer storage when a wider range than int is required.
+Guarantees:
+ssize_t is guaranteed to be able to represent the maximum size of any object, which is a stronger guarantee than long int's minimum size.
+In summary:
+Use ssize_t when dealing with sizes or counts that might also convey error information (e.g., return values from system calls like read() or write()).
+
 */
 #include <stddef.h>    /*size_t*/
-#include <sys/types.h> /*ssize_t*/
-#include <stdlib.h> /*malloc()*/
+#include <sys/types.h> /*ssize_t is a long int*/
+#include <stdio.h>
 
 typedef struct {
     char *  charPointerCommand;
@@ -57,13 +68,54 @@ InputMemory newInputMemory() {
     InputMemory inputMemory;
     inputMemory.charPointerCommand = NULL;
     inputMemory.memoryLength = 0;
-    inputMemory.inputLength  = 0;
+    inputMemory.inputLength  = 31;
 
     return inputMemory;
+
+    /*
+    The difference between a struct and a pointer to a struct lies in what they represent and how they are handled in memory.
+    1. struct (Value Type):
+       A struct directly represents a composite data type, grouping together related data members under a single name.
+       When you declare a variable of a struct type, memory is allocated directly for all its members.
+       Passing a struct to a function or assigning it to another struct variable results in a copy of the entire structure's data.
+       Modifications to the copy within a function will not affect the original struct.
+    2. pointer to a struct (Reference Type):
+       A pointer to a struct is a variable that stores the memory address of a struct instance. It does not store the struct itself.
+       Memory for the struct pointed to must be allocated separately (e.g., using malloc or by declaring a struct variable and taking its address).
+       Passing a pointer to a struct to a function means passing only the memory address.
+       This allows the function to directly access and modify the original struct's data without copying the entire structure.
+
+    https://stackoverflow.com/questions/61600147/why-use-pointer-to-struct-and-not-use-the-struct-directly-c
+    "why would I pass a variable as an argument to my function instead of just keeping it as a global variable?",
+    Pointers are helpful because you can "move them around" more easily.
+    Instead of having to copy over the whole stucture each time, you can just leave it where it is in memory and instead pass a pointer to it around.
+    passing a pointer means you can modify "a" without having to copy it back, since the stucture resides in only one place in memory.
+    */
 
 }
 
 
 int main() {
 
+    InputMemory inputMemory = newInputMemory();
+
+    printf("%ld\n", inputMemory.inputLength);
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
