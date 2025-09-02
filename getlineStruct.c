@@ -45,7 +45,7 @@ InputMemory newInputMemory() {
     InputMemory inputMemory;
 
     /*char * must initialize 0 (NULL) or segfault coredump will raised*/
-    inputMemory.charPointerCommand = (void *)NULL;
+    inputMemory.charPointerCommand = NULL;
 
     return inputMemory;
 
@@ -55,19 +55,17 @@ InputMemory newInputMemory() {
 void printPrompt() {printf("database > ");}
 
 
-size_t readInput(InputMemory inputMemory) {
+size_t readInput(InputMemory * inputMemory) {
 
     /*size_t getline(char ** charDoublePointerLine, size_t * allocatedCharLength, FILE * stream)*/
-    size_t bytesRead = getline(&inputMemory.charPointerCommand, &inputMemory.memoryLength, stdin);
+    inputMemory->inputLength = getline(&inputMemory->charPointerCommand, &inputMemory->memoryLength, stdin);
 
-    return bytesRead;
+    return inputMemory->inputLength;
 
 }
 
 
 int main() {
-
-    size_t bytesRead;
 
     InputMemory inputMemory = newInputMemory();
 
@@ -75,9 +73,9 @@ int main() {
 
 	printPrompt();
 
-	bytesRead = readInput(inputMemory);
+	readInput(&inputMemory);
 
-	printf("%s %ld %ld %ld\n", inputMemory.charPointerCommand, inputMemory.memoryLength, inputMemory.inputLength, bytesRead);
+	printf("%s %lu %ld\n", inputMemory.charPointerCommand, inputMemory.memoryLength, inputMemory.inputLength);
 
     }
 
