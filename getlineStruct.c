@@ -55,12 +55,10 @@ InputMemory newInputMemory() {
 void printPrompt() {printf("database > ");}
 
 
-size_t readInput(InputMemory * inputMemory) {
+void readInput(InputMemory * inputMemory) {
 
-    /*size_t getline(char ** charDoublePointerLine, size_t * allocatedCharLength, FILE * stream)*/
+    /*ssize_t getline(char ** charDoublePointerLine, size_t * allocatedCharLength, FILE * stream)*/
     inputMemory->inputLength = getline(&inputMemory->charPointerCommand, &inputMemory->memoryLength, stdin);
-
-    return inputMemory->inputLength;
 
 }
 
