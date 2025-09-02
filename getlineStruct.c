@@ -40,13 +40,12 @@ typedef struct {
 } InputMemory;
 
 
-InputMemory * newInputMemory() {
+InputMemory newInputMemory() {
 
-    InputMemory * inputMemory = (InputMemory *)malloc(sizeof(inputMemory));
-    
-    /*(* inputMemory).charPointerCommand;*/
-    (* inputMemory).memoryLength = 0;
-    (* inputMemory).inputLength  = 0;
+    InputMemory inputMemory;
+
+    /*char * must initialize 0 (NULL) or segfault coredump will raised*/
+    inputMemory.charPointerCommand = (void *)NULL;
 
     return inputMemory;
 
@@ -56,29 +55,21 @@ InputMemory * newInputMemory() {
 void printPrompt() {printf("database > ");}
 
 
-size_t readInput(InputMemory * inputMemory) {
+size_t readInput(InputMemory inputMemory) {
 
-    /*
-    why using InputMemory * inputMemory, not InputMemory inputMemory ?
-    because somewhere inside of getline() function, you cant pass char * as a struct, must use struct *
-    size_t getline(char ** charDoublePointerLine, size_t * allocatedCharLength, FILE * stream)
-    */
-    size_t bytesRead = getline(&(*inputMemory).charPointerCommand, &(*inputMemory).memoryLength, stdin);
+    /*size_t getline(char ** charDoublePointerLine, size_t * allocatedCharLength, FILE * stream)*/
+    size_t bytesRead = getline(&inputMemory.charPointerCommand, &inputMemory.memoryLength, stdin);
 
     return bytesRead;
 
 }
 
 
-
-
-
-
 int main() {
 
     size_t bytesRead;
 
-    InputMemory * inputMemory = newInputMemory();
+    InputMemory inputMemory = newInputMemory();
 
     while (1) {
 
@@ -86,27 +77,8 @@ int main() {
 
 	bytesRead = readInput(inputMemory);
 
-	printf("%s %ld %ld %ld\n", (*inputMemory).charPointerCommand, (*inputMemory).memoryLength, (*inputMemory).inputLength, bytesRead);
-
+	printf("%s %ld %ld %ld\n", inputMemory.charPointerCommand, inputMemory.memoryLength, inputMemory.inputLength, bytesRead);
 
     }
 
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

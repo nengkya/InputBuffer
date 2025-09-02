@@ -21,15 +21,19 @@ int main() {
     why not using char ** charDoublePointerLine ?
     you will get null in printf(%s is pointer to a char); or segfault coredump
     */
-    char * charPointerLine = "three";
+    char * charPointerLine;
+    
+    size_t bytesRead;
 
     size_t * allocatedCharLength = (size_t *)malloc(sizeof(size_t));
 
     printf("Enter a line of text : ");
 
-    getline(&charPointerLine, allocatedCharLength, stdin);
+    while (bytesRead = getline(&charPointerLine, allocatedCharLength, stdin)) {
 
-    printf("%ld %s", * allocatedCharLength, charPointerLine);
+        printf("byte read: %ld\n", bytesRead);
+
+    }
 
 
 }
